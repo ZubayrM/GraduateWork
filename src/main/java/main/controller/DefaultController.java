@@ -12,10 +12,7 @@ public class DefaultController {
         return "index";
     }
 
-    @GetMapping("/api/init/")
-    public Init getInfo(){
-        return new Init();
-    }
+
 
 
 
