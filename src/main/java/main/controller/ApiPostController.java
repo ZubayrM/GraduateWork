@@ -1,10 +1,9 @@
 package main.controller;
 
-import javafx.geometry.Pos;
-import main.model.ModerationStatus;
-import main.model.Posts;
-import main.model.PostsRepository;
+import com.mysql.cj.xdevapi.Collection;
+import main.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,24 +11,56 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class ApiPostController {
 
-    @Autowired
-    PostsRepository postsRepository;
 
-    @GetMapping("/api/post/{offset},{limit},{status}")
-    public ResponseEntity postsList(int offset, int limit, ModerationStatus status){
+    @Autowired
+    Repositories.PostsRepository postsRepository;
+
+
+    @GetMapping("/api/post")
+    public ResponseEntity postsList(Integer offset, Integer limit, String mode){
+        int count;
+        Iterable<Posts> iterator = postsRepository.findAll();
         List<Posts> list = new ArrayList<>();
-        Iterable<Posts> iterable = postsRepository.findAll();
-        for (Posts post: iterable){
-          list.add(post);
+        for (Posts post: iterator){
+            list.add(post);
         }
-        int count = list.size();
-        return null;
+
+
+        List<Posts> postsList = list.stream()
+                .filter(post -> post.getIsActive() == 1)
+                .filter(post -> post.getModerationStatus() == ModerationStatus.ACCEPTED)
+                .collect(Collectors.toList());
+
+        switch (mode){
+            case "recent" : {
+                postsList.sort(Comparator.comparing(Posts::getTime));
+                Collections.reverse(postsList);
+            }
+            break;
+            case "popular " : postsList.sort(Comparator.comparing(post -> post.getPostCommentsList().size()));
+            break;
+            case "best" : postsList.sort(Comparator.comparing(post -> post.getPostVotesList().size()));
+            break;
+            case "early" :postsList.sort(Comparator.comparing(Posts::getTime)) ;
+        }
+
+        count = postsList.size();
+        if ((offset + limit) > count) limit = count;
+        List<Posts> posts = postsList.subList(offset, offset+limit);
+
+        ///////////// export //////////////////////////////
+        Map<Object,Object> map = new TreeMap<>();        //
+        map.put("count", list.size());                   //
+        map.put("posts", posts);                         //
+        ///////////////////////////////////////////////////
+
+        return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
     @GetMapping("/api/post/search/{query}")

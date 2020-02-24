@@ -2,6 +2,7 @@ package main.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -35,6 +36,10 @@ public class Posts {
 
     @Column(name = "view_count", nullable = false)
     private int viewCount;
+
+    private List<PostComments> postCommentsList;
+
+    private List<PostVotes> postVotesList;
 
     public int getId() {
         return id;
@@ -106,5 +111,21 @@ public class Posts {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public List<PostComments> getPostCommentsList() {
+        return postCommentsList;
+    }
+
+    public void setPostCommentsList(List<PostComments> postCommentsList) {
+        this.postCommentsList = postCommentsList;
+    }
+
+    public List<PostVotes> getPostVotesList() {
+        return postVotesList;
+    }
+
+    public void setPostVotesList(List<PostVotes> postVotesList) {
+        this.postVotesList = postVotesList;
     }
 }
