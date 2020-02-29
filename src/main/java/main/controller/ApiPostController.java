@@ -1,6 +1,7 @@
 package main.controller;
 
-import com.mysql.cj.xdevapi.Collection;
+import main.MySQL.SqlCommands;
+import main.Repositories.PostsRepository;
 import main.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,44 +20,23 @@ public class ApiPostController {
 
 
     @Autowired
-    Repositories.PostsRepository postsRepository;
+    PostsRepository postsRepository;
 
 
     @GetMapping("/api/post")
     public ResponseEntity postsList(Integer offset, Integer limit, String mode){
-        int count;
-        Iterable<Posts> iterator = postsRepository.findAll();
-        List<Posts> list = new ArrayList<>();
-        for (Posts post: iterator){
-            list.add(post);
-        }
+        int count = 0;
 
+        List<Posts> list = SqlCommands.getPostsList(mode);
 
-        List<Posts> postsList = list.stream()
-                .filter(post -> post.getIsActive() == 1)
-                .filter(post -> post.getModerationStatus() == ModerationStatus.ACCEPTED)
-                .collect(Collectors.toList());
+        if ((offset + limit) > list.size()) limit = count;
+        List<Posts> posts = list.subList(offset, offset+limit);
+        count += posts.size();
 
-        switch (mode){
-            case "recent" : {
-                postsList.sort(Comparator.comparing(Posts::getTime));
-                Collections.reverse(postsList);
-            }
-            break;
-            case "popular " : postsList.sort(Comparator.comparing(post -> post.getPostCommentsList().size()));
-            break;
-            case "best" : postsList.sort(Comparator.comparing(post -> post.getPostVotesList().size()));
-            break;
-            case "early" :postsList.sort(Comparator.comparing(Posts::getTime)) ;
-        }
-
-        count = postsList.size();
-        if ((offset + limit) > count) limit = count;
-        List<Posts> posts = postsList.subList(offset, offset+limit);
 
         ///////////// export //////////////////////////////
         Map<Object,Object> map = new TreeMap<>();        //
-        map.put("count", list.size());                   //
+        map.put("count", count);                         //
         map.put("posts", posts);                         //
         ///////////////////////////////////////////////////
 

@@ -37,9 +37,9 @@ public class Posts {
     @Column(name = "view_count", nullable = false)
     private int viewCount;
 
-    private List<PostComments> postCommentsList;
-
-    private List<PostVotes> postVotesList;
+//    private List<PostComments> postCommentsList;
+//
+//    private List<PostVotes> postVotesList;
 
     public int getId() {
         return id;
@@ -113,19 +113,19 @@ public class Posts {
         this.viewCount = viewCount;
     }
 
-    public List<PostComments> getPostCommentsList() {
-        return postCommentsList;
-    }
-
-    public void setPostCommentsList(List<PostComments> postCommentsList) {
-        this.postCommentsList = postCommentsList;
-    }
-
-    public List<PostVotes> getPostVotesList() {
-        return postVotesList;
-    }
-
-    public void setPostVotesList(List<PostVotes> postVotesList) {
-        this.postVotesList = postVotesList;
-    }
+//    public List<PostComments> getPostCommentsList() {
+//        return postCommentsList;
+//    }
+//
+//    public void setPostCommentsList(List<PostComments> postCommentsList) {
+//        this.postCommentsList = postCommentsList;
+//    }
+//
+//    public List<PostVotes> getPostVotesList() {
+//        return postVotesList;
+//    }
+//
+//    public void setPostVotesList(List<PostVotes> postVotesList) {
+//        this.postVotesList = postVotesList;
+//    }
 }
