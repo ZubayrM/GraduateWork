@@ -27,7 +27,7 @@ public class ApiPostController {
     public ResponseEntity postsList(Integer offset, Integer limit, String mode){
         int count = 0;
 
-        List<Posts> list = SqlCommands.getPostsList(mode);
+        List<Posts> list = postsRepository.findByMode(mode,1,ModerationStatus.ACCEPTED);
 
         if ((offset + limit) > list.size()) limit = count;
         List<Posts> posts = list.subList(offset, offset+limit);

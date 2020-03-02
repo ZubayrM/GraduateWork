@@ -1,7 +1,10 @@
 package main.model;
 
+import org.springframework.data.jpa.repository.Query;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 

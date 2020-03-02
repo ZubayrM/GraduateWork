@@ -11,10 +11,14 @@ public abstract class SqlCommands {
     @Autowired
     private static SessionFactory sessionFactory; // ???
 
+
+
     private static Session session = sessionFactory.getCurrentSession();
 
 
     public static List getPostsList(String mode){
+
+
         List<Posts> list = null;
         String hql = null;
 
