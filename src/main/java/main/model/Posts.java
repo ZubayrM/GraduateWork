@@ -1,5 +1,6 @@
 package main.model;
 
+import lombok.Data;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Data
 @Entity
 public class Posts {
 

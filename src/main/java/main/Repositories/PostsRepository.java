@@ -1,5 +1,6 @@
 package main.Repositories;
 
+import main.model.Mode;
 import main.model.ModerationStatus;
 import main.model.Posts;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +14,11 @@ import java.util.List;
 public interface PostsRepository extends CrudRepository<Posts,Integer> {
 
 
-    default List<Posts> findByMode(String mode, int isActive, ModerationStatus status){
-        if (mode.equalsIgnoreCase("Recent")) return postsSortByRecent(isActive, status);
-        else if (mode.equalsIgnoreCase("Popular")) return postsSortByPopular(isActive, status);
-        else if (mode.equalsIgnoreCase("Best")) return postsSortByBest(isActive, status);
-        else if (mode.equalsIgnoreCase("Early")) return postsSortByEarly(isActive, status);
+    default List<Posts> findByMode(Mode mode, int isActive, ModerationStatus status){
+        if (mode == Mode.RECENT) return postsSortByRecent(isActive, status);
+        else if (mode == Mode.POPULAR) return postsSortByPopular(isActive, status);
+        else if (mode == Mode.BEST) return postsSortByBest(isActive, status);
+        else if (mode == Mode.EARLY) return postsSortByEarly(isActive, status);
         else return null;
     }
 
