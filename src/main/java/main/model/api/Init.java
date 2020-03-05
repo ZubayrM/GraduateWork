@@ -6,7 +6,7 @@ public class Init {
     private String phone = "+7 996 420-81-88";
     private String email = "zubayr_@live.com";
     private String copyright = "Зубайр Мухтаров";
-    private String copyrightForm = "2020";
+    private String copyrightFrom = "2020";
 
     public String getTitle() {
         return title;
@@ -28,7 +28,7 @@ public class Init {
         return copyright;
     }
 
-    public String getCopyrightForm() {
-        return copyrightForm;
+    public String getCopyrightFrom() {
+        return copyrightFrom;
     }
 }
