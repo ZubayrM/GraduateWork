@@ -24,20 +24,32 @@ public class ApiPostController {
 
 
     @GetMapping("/api/post")
-    public ResponseEntity postsList(Integer offset, Integer limit, String mode){
+    public ResponseEntity postsList(Integer offset, Integer limit, Mode mode){
         int count = 0;
 
         List<Posts> list = postsRepository.findByMode(mode,1,ModerationStatus.ACCEPTED);
 
-        if ((offset + limit) > list.size()) limit = count;
+        if ((offset + limit) > list.size()) limit = list.size()-offset;
         List<Posts> posts = list.subList(offset, offset+limit);
         count += posts.size();
 
+        Map<Object, Object> postMap = new TreeMap<>();
+
+        for (Posts post: posts){
+            postMap.put("id", post.getId());
+            postMap.put("time", post.getTime());
+            postMap.put("title", post.getTitle());
+            postMap.put("announce", post.getText());
+            postMap.put("liceCount", post.getText());
+            postMap.put("dislikeCount", post.getText());
+            postMap.put("commentCount", post.getText());
+            postMap.put("viewCount", post.getText());
+        }
 
         ///////////// export //////////////////////////////
         Map<Object,Object> map = new TreeMap<>();        //
         map.put("count", count);                         //
-        map.put("posts", posts);                         //
+        map.put("posts", postMap);                         //
         ///////////////////////////////////////////////////
 
         return ResponseEntity.status(HttpStatus.OK).body(map);
