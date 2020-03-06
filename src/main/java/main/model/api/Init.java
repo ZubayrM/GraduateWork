@@ -1,5 +1,8 @@
 package main.model.api;
 
+import lombok.Getter;
+
+@Getter
 public class Init {
     private String title = "DevPut";
     private String subtitle = "Рассказы разработчиков";
@@ -8,27 +11,4 @@ public class Init {
     private String copyright = "Зубайр Мухтаров";
     private String copyrightFrom = "2020";
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getCopyright() {
-        return copyright;
-    }
-
-    public String getCopyrightFrom() {
-        return copyrightFrom;
-    }
 }

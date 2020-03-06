@@ -52,4 +52,6 @@ public interface PostsRepository extends CrudRepository<Posts,Integer> {
     List<Posts> postsSortByEarly(@Param("active") int isActive, @Param("status") ModerationStatus status);
 
 
+
+
 }
