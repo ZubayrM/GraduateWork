@@ -1,7 +1,8 @@
 package main.controller;
-
-import main.MySQL.SqlCommands;
+import main.Repositories.PostCommentsRepository;
+import main.Repositories.PostVotesRepository;
 import main.Repositories.PostsRepository;
+import main.Repositories.UsersRepository;
 import main.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,18 +11,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 public class ApiPostController {
 
-
     @Autowired
     PostsRepository postsRepository;
 
+    @Autowired
+    PostVotesRepository postVotesRepository;
+
+    @Autowired
+    PostCommentsRepository postCommentsRepository;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     @GetMapping("/api/post")
     public ResponseEntity postsList(Integer offset, Integer limit, Mode mode){
@@ -30,29 +36,38 @@ public class ApiPostController {
         List<Posts> list = postsRepository.findByMode(mode,1,ModerationStatus.ACCEPTED);
 
         if ((offset + limit) > list.size()) limit = list.size()-offset;
-        List<Posts> posts = list.subList(offset, offset+limit);
-        count += posts.size();
+        List<Posts> postsList = list.subList(offset, offset+limit);
+        count += postsList.size();
 
-        Map<Object, Object> postMap = new TreeMap<>();
+        Set<Map> posts = new TreeSet<>(Comparator.comparing(o -> String.valueOf(o.get("id"))));
 
-        for (Posts post: posts){
+        for (Posts post: postsList){
+            Map<String, Object> postMap = new TreeMap<>();
+            Users user = usersRepository.findById(post.getUserId());
+
             postMap.put("id", post.getId());
             postMap.put("time", post.getTime());
+            postMap.put("user",new TreeMap<String, Object>(){{
+                put("id", user.getId());
+                put("name", user.getName());
+            }});
             postMap.put("title", post.getTitle());
             postMap.put("announce", post.getText());
-            postMap.put("liceCount", post.getText());
-            postMap.put("dislikeCount", post.getText());
-            postMap.put("commentCount", post.getText());
-            postMap.put("viewCount", post.getText());
+            postMap.put("liceCount", postVotesRepository.findByPostIdAndValue(post.getId(),1).size());
+            postMap.put("dislikeCount", postVotesRepository.findByPostIdAndValue(post.getId(), -1).size());
+            postMap.put("commentCount", postCommentsRepository.findByPostId(post.getId()).size());
+            postMap.put("viewCount", post.getViewCount());
+
+            posts.add(postMap);
         }
 
         ///////////// export //////////////////////////////
-        Map<Object,Object> map = new TreeMap<>();        //
-        map.put("count", count);                         //
-        map.put("posts", postMap);                         //
+        Map<Object,Object> result = new TreeMap<>();     //
+        result.put("count", count);                      //
+        result.put("posts", posts);                      //
         ///////////////////////////////////////////////////
 
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/api/post/search/{query}")

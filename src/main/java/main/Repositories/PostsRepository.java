@@ -22,7 +22,6 @@ public interface PostsRepository extends CrudRepository<Posts,Integer> {
         else return null;
     }
 
-
     @Query(value = "SELECT * FROM Posts " +
             "WHERE is_active = :active moderation_status = :status " +
             "ORDER BY time DESC",
