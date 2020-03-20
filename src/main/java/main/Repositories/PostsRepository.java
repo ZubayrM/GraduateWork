@@ -1,7 +1,7 @@
 package main.Repositories;
 
-import main.model.Mode;
-import main.model.ModerationStatus;
+import main.model.enums.Mode;
+import main.model.enums.ModerationStatus;
 import main.model.Posts;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

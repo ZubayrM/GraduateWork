@@ -1,13 +1,10 @@
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import junit.framework.TestCase;
 import main.Repositories.PostsRepository;
-import main.controller.ApiPostController;
-import main.model.Mode;
-import main.model.ModerationStatus;
+import main.controllers.api.ApiPostController;
+import main.model.enums.Mode;
+import main.model.enums.ModerationStatus;
 import main.model.Posts;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -22,23 +19,23 @@ public class ApiPostControllerTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
 
-        for (int i = 0; i < 30; i++){
-
-            Posts.PostsBuilder posts = Posts.builder()
-                    .id(i)
-                    .isActive(1)
-                    .moderationId(1)
-                    .moderationStatus(ModerationStatus.NEW)
-                    .userId(i)
-                    .time(LocalDate.now())
-                    .title("текст")
-                    .text("собственно сам текст")
-                    .viewCount((int) Math.random() * 100 );
-
-            System.out.println(posts.build());
-
-            postsRepository.save(posts.build());
-        }
+//        for (int i = 0; i < 30; i++){
+//
+//            Posts.PostsBuilder posts = Posts.builder()
+//                    .id(i)
+//                    .isActive(1)
+//                    .moderationId(1)
+//                    .moderationStatus(ModerationStatus.NEW)
+//                    .userId(i)
+//                    .time(LocalDate.now())
+//                    .title("текст")
+//                    .text("собственно сам текст")
+//                    .viewCount((int) Math.random() * 100 );
+//
+//            System.out.println(posts.build());
+//
+//            postsRepository.save(posts.build());
+//        }
 
     }
 
