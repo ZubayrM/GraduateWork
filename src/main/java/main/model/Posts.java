@@ -1,11 +1,13 @@
 package main.model;
 
-import lombok.Builder;
+
 import lombok.Data;
+import main.model.enums.ModerationStatus;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Calendar;
 
-@Builder
 @Data
 @Entity
 public class Posts {
@@ -28,7 +30,7 @@ public class Posts {
     private int userId;
 
     @Column(nullable = false)
-    private LocalDate time;
+    private Calendar time;
 
     @Column(nullable = false)
     private String title;

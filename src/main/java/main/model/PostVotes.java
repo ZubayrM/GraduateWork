@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Calendar;
 
 @Data
 @Entity
@@ -21,7 +22,7 @@ public class PostVotes {
     private int postId;
 
     @Column(nullable = false)
-    private LocalDate time;
+    private Calendar time;
 
     @Column(nullable = false)
     private int value;
