@@ -3,10 +3,14 @@ import main.Repositories.PostCommentsRepository;
 import main.Repositories.PostVotesRepository;
 import main.Repositories.PostsRepository;
 import main.Repositories.UsersRepository;
+import main.dto.respose.ListPostResponseDto;
 import main.model.*;
 import main.model.enums.Mode;
 import main.model.enums.ModerationStatus;
+import main.services.PostsService;
+import main.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,22 +23,36 @@ import java.util.*;
 @RestController
 public class ApiPostController {
 
-    @Autowired
-    PostsRepository postsRepository;
+    private PostsRepository postsRepository;
+    private PostVotesRepository postVotesRepository;
+    private PostCommentsRepository postCommentsRepository;
+    private UsersRepository usersRepository;
+    private PostsService postsService;
+    private UsersService usersService;
 
-    @Autowired
-    PostVotesRepository postVotesRepository;
-
-    @Autowired
-    PostCommentsRepository postCommentsRepository;
-
-    @Autowired
-    UsersRepository usersRepository;
+    public ApiPostController(PostsRepository postsRepository, PostVotesRepository postVotesRepository, PostCommentsRepository postCommentsRepository, UsersRepository usersRepository, PostsService postsService) {
+        this.postsRepository = postsRepository;
+        this.postVotesRepository = postVotesRepository;
+        this.postCommentsRepository = postCommentsRepository;
+        this.usersRepository = usersRepository;
+        this.postsService = postsService;
+    }
 
     @GetMapping("/api/post")
-    public ResponseEntity postsList(Integer offset, Integer limit, Mode mode){
-        int count = 0;
+    public ResponseEntity postsList(@DefaultValue("0") Integer offset,@DefaultValue("10") Integer limit, Mode mode){
 
+        ListPostResponseDto listPostResponseDto = postsService.getListPost(mode);
+
+        usersService.getAuthor(listPostResponseDto);
+
+        listPostResponseDto.builder()
+                .count(postsService.getListPost(mode))
+
+
+
+
+        /////////////////////////// внизу старый код////////////////////////
+        int count = 0;
         List<Posts> list = postsRepository.findByMode(mode,1, ModerationStatus.ACCEPTED);
 
         if ((offset + limit) > list.size()) limit = list.size()-offset;

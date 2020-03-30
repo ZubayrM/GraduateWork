@@ -6,6 +6,7 @@ import main.model.enums.ModerationStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Entity
@@ -29,7 +30,7 @@ public class Posts {
     private int userId;
 
     @Column(nullable = false)
-    private LocalDate time;
+    private Date time;
 
     @Column(nullable = false)
     private String title;

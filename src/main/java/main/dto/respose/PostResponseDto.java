@@ -1,12 +1,14 @@
-package main.dto.responseModel;
+package main.dto.respose;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Calendar;
 import java.util.Date;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +16,7 @@ public class PostResponseDto {
 
     private Integer id;
 
-    private Calendar time;
+    private Date time;
 
     private UserResponseDto userResponseDto;
 

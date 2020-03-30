@@ -1,9 +1,6 @@
-package main.dto.responseModel;
+package main.dto.respose;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public class ListPostResponseDto {
 
     Integer count;
 
+    @Singular
     List<PostResponseDto> posts;
 
 }
