@@ -12,17 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResponseDto {
-
-    private Integer id;
-
-    private Date time;
-
-    private UserResponseDto userResponseDto;
-
-    private String title;
-
-    private String announce;
+public class PostLDCVDto extends PostDto {
 
     private Integer liceCount;
 

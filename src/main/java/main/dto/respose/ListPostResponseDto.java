@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 public class ListPostResponseDto {
 
-    Integer count;
+    private Integer count;
 
     @Singular
-    List<PostResponseDto> posts;
+    private List<PostLDCVDto> posts;
 
 }

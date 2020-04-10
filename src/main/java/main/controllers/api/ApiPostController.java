@@ -40,58 +40,12 @@ public class ApiPostController {
 
     @GetMapping("/api/post")
     public ResponseEntity postsList(@DefaultValue("0") Integer offset,@DefaultValue("10") Integer limit, Mode mode){
+        return ResponseEntity.ok(null);
+}
 
-        ListPostResponseDto listPostResponseDto = postsService.getListPost(mode);
+    @GetMapping("/api/post/search/")
+    public ResponseEntity getPosts(Integer offset, Integer limit, String query){
 
-        usersService.getAuthor(listPostResponseDto);
-
-        listPostResponseDto.builder()
-                .count(postsService.getListPost(mode))
-
-
-
-
-        /////////////////////////// внизу старый код////////////////////////
-        int count = 0;
-        List<Posts> list = postsRepository.findByMode(mode,1, ModerationStatus.ACCEPTED);
-
-        if ((offset + limit) > list.size()) limit = list.size()-offset;
-        List<Posts> postsList = list.subList(offset, offset+limit);
-        count += postsList.size();
-
-        Set<Map> posts = new TreeSet<>(Comparator.comparing(o -> String.valueOf(o.get("id"))));
-
-        for (Posts post: postsList){
-            Map<String, Object> postMap = new TreeMap<>();
-            Users user = usersRepository.findById(post.getUserId());
-
-            postMap.put("id", post.getId());
-            postMap.put("time", post.getTime());
-            postMap.put("user",new TreeMap<String, Object>(){{
-                put("id", user.getId());
-                put("name", user.getName());
-            }});
-            postMap.put("title", post.getTitle());
-            postMap.put("announce", post.getText());
-            postMap.put("liceCount", postVotesRepository.findByPostIdAndValue(post.getId(),1).size());
-            postMap.put("dislikeCount", postVotesRepository.findByPostIdAndValue(post.getId(), -1).size());
-            postMap.put("commentCount", postCommentsRepository.findByPostId(post.getId()).size());
-            postMap.put("viewCount", post.getViewCount());
-
-            posts.add(postMap);
-        }
-
-        ///////////// export //////////////////////////////
-        Map<Object,Object> result = new TreeMap<>();     //
-        result.put("count", count);                      //
-        result.put("posts", posts);                      //
-        ///////////////////////////////////////////////////
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    @GetMapping("/api/post/search/{query}")
-    public ResponseEntity getPosts(String query, int limit){
         return null;
     }
 
