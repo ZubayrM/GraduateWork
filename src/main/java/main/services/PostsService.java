@@ -4,6 +4,7 @@ import main.Repositories.PostsRepository;
 import main.dto.respose.ListPostResponseDto;
 import main.dto.respose.PostDto;
 import main.dto.respose.PostLDCVDto;
+import main.dto.respose.UserDto;
 import main.model.Posts;
 import main.model.enums.Mode;
 import main.model.enums.ModerationStatus;
@@ -21,27 +22,16 @@ public class PostsService {
     public ListPostResponseDto getListPost(Mode mode){
 
         List<Posts> postsList = postsRepository.findByMode(mode,1, ModerationStatus.ACCEPTED);
-        PostDto postLDCVDto = new PostLDCVDto();
+        PostDto postLDCVDto;
         ListPostResponseDto listPostResponseDto = new ListPostResponseDto();
 
-
         for (Posts request: postsList){
-            postLDCVDto = PostLDCVDto.builder()
-                    .id(request.getId())
-                    .time(request.getTime())
-                    .userResponseDto(null)
-                    .title(request.getTitle())
-                    .announce(null)
-                    .liceCount(null)
-                    .dislikeCount(null)
-                    .viewCount(null)
-                    .build();
+            postLDCVDto = new PostDto(request.getId(), request.getTime(), new UserDto(),request.getTitle(), request.getTitle());
             listPostResponseDto.getPosts().add(postLDCVDto);
         }
 
         return ListPostResponseDto.builder()
                 .count((int)postsRepository.count())
-                .post(postLDCVDto)
                 .build();
     }
 

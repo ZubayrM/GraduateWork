@@ -13,6 +13,6 @@ public class ListPostResponseDto {
     private Integer count;
 
     @Singular
-    private List<PostLDCVDto> posts;
+    private List<PostDto> posts;
 
 }
